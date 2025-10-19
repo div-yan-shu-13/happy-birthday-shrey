@@ -151,7 +151,7 @@ export default function Home() {
       )}
       {/* Main Content */}
       <motion.div
-        className="z-10 flex flex-col items-center -mt-16 md:mt-0"
+        className="z-10 flex flex-col items-center -mt-75 md:mt-0"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
@@ -231,7 +231,7 @@ export default function Home() {
             style={{ color: palette.buttonBg }}
             fill="currentColor"
           />{" "}
-          by Lavya{" "}
+          by Lavya & Executed by Divyanshu{" "}
         </span>{" "}
       </motion.div>
     </main>
