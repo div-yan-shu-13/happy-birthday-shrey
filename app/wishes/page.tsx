@@ -102,7 +102,7 @@ export default function WishesPage() {
               className="text-lg font-semibold text-center mb-2"
               style={{ color: palette.textPrimary }}
             >
-              "{wish.message}"
+              &quot;{wish.message}&quot;
             </div>
             <div
               className="text-base text-right w-full italic font-bold mt-2"

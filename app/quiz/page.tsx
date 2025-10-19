@@ -173,8 +173,8 @@ export default function QuizPage() {
               className="text-base mb-8"
               style={{ color: palette.textSecondary }}
             >
-              Let's take a tiny walk down memory lane. Each question is a little
-              heart from our story. Ready?
+              Let&apos;s take a tiny walk down memory lane. Each question is a
+              little heart from our story. Ready?
             </p>
             <MotionButton
               size="lg"
@@ -306,8 +306,9 @@ export default function QuizPage() {
               className="text-base mb-8"
               style={{ color: palette.textSecondary }}
             >
-              Thank you for all the memories we've shared, Shrey. Every moment
-              is my favorite. Here's to so many more adventures together.
+              Thank you for all the memories we&apos;ve shared, Shrey. Every
+              moment is my favorite. Here&apos;s to so many more adventures
+              together.
             </p>
             <MotionButton
               size="lg"
