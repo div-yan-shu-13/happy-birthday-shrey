@@ -32,32 +32,33 @@ const palette = {
 };
 
 // --- Poem with grammatical fixes AND escaped apostrophes ---
+// --- Poem with grammatical fixes AND standard apostrophes ---
 const poem = [
-  "When I&apos;m with everyone but you, I&apos;m with no one", // Escaped I'm, I'm
-  "You&apos;re the lottery that I have won", // Escaped You're
-  "When our eyes meet, and I&apos;m in your arms", // Escaped I'm
+  "When I'm with everyone but you, I'm with no one",
+  "You're the lottery that I have won",
+  "When our eyes meet, and I'm in your arms",
   "Suddenly, I am whole, my heart is free",
   "And with every glance, a love song softly starts",
   "",
   "I wonder how you feel this way about me",
-  "It&apos;s serendipitous, the miracle of having found you", // Escaped It's
-  "Someone who&apos;s everything I&apos;ve ever dreamt of", // Escaped who's, I've
+  "It's serendipitous, the miracle of having found you",
+  "Someone who's everything I've ever dreamt of",
   "How often do dreams come true?",
   "",
-  "You&apos;re so fucking pretty I could sit here and cry", // Escaped You're
+  "You're so fucking pretty I could sit here and cry",
   "A canvas painted by angels, a masterpiece",
-  "I pinch myself, incredulous that you&apos;re mine", // Escaped you're
+  "I pinch myself, incredulous that you're mine",
   "A celestial alignment, a cosmic release",
   "",
   "I love the way your teeth peek from within your smile",
   "And I love the way your eyes get so smol when you laugh",
   "Your existence is so precious, like a rare gem",
-  "I thank God for you every day on this world&apos;s behalf", // Escaped world's
+  "I thank God for you every day on this world's behalf",
   "",
   "Your strength and vulnerability have me awestruck",
   "A paradox of your boldness and your delicate touch",
   "Your hands on me feel like coming home",
-  "No wonder I can&apos;t help but adore you so much", // Escaped can't
+  "No wonder I can't help but adore you so much",
   "",
   "My life took a turn when you called me your dream girl",
   "And I pondered the rarity of dreams coming true",
@@ -67,7 +68,7 @@ const poem = [
   "My lips on yours, like a honeybee sipping nectar",
   "Like it has finally found the flower it loves the most",
   "Losing myself in your taste for an eternity",
-  "I wouldn&apos;t let go of it at any cost", // Escaped wouldn't
+  "I wouldn't let go of it at any cost",
   "",
   "All my life, fake smiling, laughing alone",
   "So used to being on my own",
@@ -125,7 +126,7 @@ export default function PoemPage() {
               <p
                 key={i}
                 // Poem lines use Square Peg
-                className={`text-2xl md:text-3xl leading-relaxed mb-2 text-center ${squarePeg.className}`}
+                className={`text-2xl font-bold md:text-3xl leading-relaxed mb-2 text-center ${squarePeg.className}`}
                 style={{
                   color: palette.textPrimary,
                   fontWeight: 400,

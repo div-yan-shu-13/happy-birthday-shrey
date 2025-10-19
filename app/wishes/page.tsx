@@ -30,19 +30,23 @@ const palette = {
 
 const wishesData = [
   {
-    sender: "Aarav",
+    sender: "Ayushi",
     message:
-      "Happy Birthday, Shrey! Here's to many more memories, inside jokes, and crazy adventures together.",
+      "Another year, another adventure! Cheers to you on your special day!  🍾🥳 Wishing you a fabulous birthday, Shrey. May your day filled with laughter and cake! 🎂",
   },
   {
-    sender: "Priya",
+    sender: "Divyanshu",
     message:
-      "Wishing you the happiest birthday, Shrey! You're sunshine on the cloudiest days. Have the best year ahead!",
+      "Happy Birthday, Shrey! I hope your year ahead is filled with laughter, love, and countless little moments that make you smile. Keep shining and may all your wishes come true!",
+  },
+  {
+    sender: "Deeksha",
+    message:
+      "Happy birthday son-in-law, to ensure your happiness, keep my daughter satisfied and smiling.",
   },
   {
     sender: "Lavya (the bestie!)",
-    message:
-      "You're the peanut butter to my jelly, the best listener and even better friend. Happy birthday, Shrey!",
+    message: "To be added later :)",
   },
   // ... add more wishes here
 ];
