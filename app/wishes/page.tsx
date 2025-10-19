@@ -3,16 +3,23 @@ import HeartsBackground from "@/components/ui/HeartsBackground";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Dancing_Script } from "next/font/google";
-import { Heart, Quote } from "lucide-react"; // Import Quote
+// --- 1. IMPORT Caveat FONT ---
+import { Dancing_Script, Caveat } from "next/font/google";
+import { Heart, Quote } from "lucide-react";
 
 // Create the MotionButton
 const MotionButton = motion(Button);
 
-// Instantiate the font
+// Instantiate the fonts
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
   weight: ["700"],
+});
+
+// --- 2. INSTANTIATE Caveat FONT ---
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500"], // Using a slightly bolder weight
 });
 
 // --- OUR VIBRANT ROMANTIC PALETTE ---
@@ -71,7 +78,7 @@ const containerVariants = {
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
-    // <-- Transition object removed
+    // Transition object removed here
     y: 0,
     opacity: 1,
   },
@@ -89,6 +96,7 @@ export default function WishesPage() {
     >
       <HeartsBackground />
 
+      {/* --- Title and Subtitle --- */}
       <motion.div
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -113,7 +121,7 @@ export default function WishesPage() {
         </motion.p>
       </motion.div>
 
-      {/* --- THIS IS THE UPDATED ANIMATION BLOCK --- */}
+      {/* --- Wishes Block --- */}
       <motion.div
         className="w-full max-w-lg px-4 py-6 space-y-8 z-10"
         variants={containerVariants}
@@ -123,7 +131,7 @@ export default function WishesPage() {
         {wishesData.map((wish, i) => (
           <motion.div
             key={i}
-            variants={itemVariants} // Each child uses the item variant
+            variants={itemVariants}
             className="rounded-lg backdrop-blur-md shadow-xl p-5 flex flex-col"
             style={{
               backgroundColor: palette.optionDefaultBg,
@@ -137,13 +145,15 @@ export default function WishesPage() {
                 fill="currentColor"
               />
               <blockquote
-                className="text-lg font-semibold text-left"
+                // --- 3. APPLY Caveat FONT ---
+                className={`text-2xl text-left ${caveat.className}`}
                 style={{ color: palette.textPrimary }}
               >
                 {wish.message}
               </blockquote>
             </div>
             <p
+              // --- Sender remains in default font ---
               className="text-base text-right w-full italic font-bold mt-2"
               style={{ color: palette.textSecondary }}
             >
@@ -152,11 +162,12 @@ export default function WishesPage() {
           </motion.div>
         ))}
       </motion.div>
-      {/* --- END OF UPDATE --- */}
 
+      {/* --- Button --- */}
       <div className="w-full flex justify-center py-7 z-10">
         <MotionButton
           size="lg"
+          // --- Button remains in default font ---
           className="px-8 py-6 text-lg rounded-full shadow-lg font-semibold"
           style={{
             backgroundColor: palette.buttonBg,
