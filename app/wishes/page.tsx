@@ -35,6 +35,11 @@ const wishesData = [
       "Another year, another adventure! Cheers to you on your special day!  🍾🥳 Wishing you a fabulous birthday, Shrey. May your day filled with laughter and cake! 🎂",
   },
   {
+    sender: "Megha",
+    message:
+      "Happy Birthday to one of the best people I know! You're funny, kind, and always ready to help anyone who needs it. People like you make life lighter and happier just by being around. I'm so glad to have a friend like you. Someone who can make me laugh no matter what and who genuinely cares. Once again happiest birthday, Shrey. 🧁💐🥳",
+  },
+  {
     sender: "Divyanshu",
     message:
       "Happy Birthday, Shrey! I hope your year ahead is filled with laughter, love, and countless little moments that make you smile. Keep shining and may all your wishes come true!",
