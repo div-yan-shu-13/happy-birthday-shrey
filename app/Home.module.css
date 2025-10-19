@@ -1,0 +1,17 @@
+/* Home.module.css */
+.backgroundImage {
+  /* Default (Mobile): Use the mobile-cropped image, centered */
+  background-image: url("/bg-home-mobile.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+}
+
+/* On medium screens and up (desktop), switch to the original desktop image */
+@media (min-width: 768px) {
+  /* 768px is Tailwind's 'md' breakpoint */
+  .backgroundImage {
+    background-image: url("/bg-home.jpg");
+    background-position: center center; /* Keep it centered on desktop */
+  }
+}

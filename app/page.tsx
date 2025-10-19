@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Dancing_Script } from "next/font/google";
+import styles from "./Home.module.css"; // Import the CSS Module
 
 // Create a motion-wrapped version of the Button
 const MotionButton = motion(Button);
@@ -16,7 +17,7 @@ const dancingScript = Dancing_Script({
   weight: ["700"],
 });
 
-// Define the palette
+// The palette remains the same
 const palette = {
   textPrimary: "#4A2E2E",
   textSecondary: "#8A5A5A",
@@ -48,24 +49,14 @@ export default function Home() {
     width: 0,
     height: 0,
   });
-  // --- FIX 1: Create state to hold the hearts ---
-  // It will be empty on the server and initial client render
   const [hearts, setHearts] = useState<HeartProps[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    // --- FIX 2: Set dimensions AND generate hearts inside useEffect ---
-    // This code only runs ONCE on the client, after mounting
+    // ... (useEffect logic remains the same) ...
     const initialWidth = window.innerWidth;
     const initialHeight = window.innerHeight;
-
-    // Set dimensions for confetti
-    setWindowDimension({
-      width: initialWidth,
-      height: initialHeight,
-    });
-
-    // Generate the heart properties using random values
+    setWindowDimension({ width: initialWidth, height: initialHeight });
     const generatedHearts = [...Array(12)].map((_, i) => ({
       id: i,
       initialX: Math.random() * initialWidth,
@@ -75,20 +66,11 @@ export default function Home() {
       duration: 12 + Math.random() * 8,
       delay: i * 1.25,
     }));
-
-    // Set the hearts into state, which will trigger a re-render
     setHearts(generatedHearts);
-
-    // --- Resize handler ---
     const handleResize = () => {
       const newWidth = window.innerWidth;
       const newHeight = window.innerHeight;
-
-      // Update dimensions for confetti
       setWindowDimension({ width: newWidth, height: newHeight });
-
-      // Update heart X positions based on new width
-      // This prevents hearts from being "stuck" on one side on resize
       setHearts((currentHearts) =>
         currentHearts.map((heart) => ({
           ...heart,
@@ -97,37 +79,29 @@ export default function Home() {
         }))
       );
     };
-
     window.addEventListener("resize", handleResize);
-
-    // --- Confetti timer ---
     const timer = setTimeout(() => setShowConfetti(false), 5000);
-
-    // --- Cleanup ---
     return () => {
       clearTimeout(timer);
       window.removeEventListener("resize", handleResize);
     };
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
   return (
     <main
-      className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden px-4"
-      style={{
-        backgroundImage: "url('/bg-home.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      // Apply CSS module class for background handling
+      // Use justify-center again as the mobile image handles layout
+      className={`flex flex-col items-center justify-center min-h-screen relative overflow-hidden px-4 ${styles.backgroundImage}`}
     >
+      {/* Overlay */}
       <div
         className="absolute inset-0 z-0"
         style={{ backgroundColor: palette.overlay }}
       ></div>
 
+      {/* ... (Rest of the code: Hearts, Confetti, Content, Footer remains the same) ... */}
       {/* Floating Hearts Background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
-        {/* --- FIX 3: Map over the 'hearts' state variable --- */}
         {hearts.map((heart) => (
           <motion.div
             key={heart.id}
@@ -165,7 +139,6 @@ export default function Home() {
       </div>
 
       {/* Animated Confetti */}
-      {/* This will now work, as windowDimension is set in useEffect */}
       {showConfetti && (
         <Confetti
           width={windowDimension.width}
@@ -178,7 +151,8 @@ export default function Home() {
 
       {/* Main Content */}
       <motion.div
-        className="z-10 flex flex-col items-center"
+        // Added negative top margin for mobile, reset for desktop
+        className="z-10 flex flex-col items-center -mt-85 md:mt-5"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
