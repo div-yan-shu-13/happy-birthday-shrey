@@ -92,7 +92,7 @@ export default function FinalPage() {
           className="text-lg md:text-xl text-center max-w-lg mb-8"
           style={{ color: palette.textPrimary }} // Use theme color
         >
-          Here's to{" "}
+          Here&apos;s to{" "}
           <span className="font-bold">
             another year of laughter, love, and
             <br />
