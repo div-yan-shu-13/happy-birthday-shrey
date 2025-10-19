@@ -218,7 +218,7 @@ export default function Home() {
         transition={{ delay: 2.5, duration: 1 }}
       >
         <span
-          className="flex items-center gap-1.5 text-sm"
+          className="flex items-center gap-1.5 text-sm font-semibold"
           style={{
             color: palette.footerText,
             textShadow: "0 1px 4px rgba(0,0,0,0.1)",
@@ -230,7 +230,7 @@ export default function Home() {
             style={{ color: palette.buttonBg }}
             fill="currentColor"
           />
-          by Lavya
+          by Lavya & Executed by Divyanshu :)
         </span>
       </motion.div>
     </main>

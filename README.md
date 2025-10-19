@@ -20,7 +20,3 @@ This is a special, personalized website created as a romantic birthday gift for 
 - **Lucide React:** For icons.
 - **react-confetti:** For the confetti effect.
 - **CSS Modules:** For handling responsive background images.
-
----
-
-Made with ❤️ by Lavya (and a friend).

@@ -3,8 +3,7 @@ import HeartsBackground from "@/components/ui/HeartsBackground";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-// --- 1. REMOVED INTER FONT ---
-import { Dancing_Script, Square_Peg } from "next/font/google";
+import { Dancing_Script, Square_Peg } from "next/font/google"; // Removed Inter
 
 // Font for headings and signature
 const dancingScript = Dancing_Script({
@@ -25,40 +24,40 @@ const MotionButton = motion(Button);
 const palette = {
   bgTop: "#FFFBF7",
   bgBottom: "#FBC2C2",
-  textPrimary: "#4A2E2E", // Dark brown for the poem
+  textPrimary: "#4A2E L2E", // Dark brown for the poem
   textSecondary: "#6D4C4C", // Lighter brown for signature
   textOnButton: "#FFFFFF",
   buttonBg: "#E26D8E",
   buttonHover: "#C95F7F",
 };
 
-// --- Poem with grammatical fixes ---
+// --- Poem with grammatical fixes AND escaped apostrophes ---
 const poem = [
-  "When I'm with everyone but you, I'm with no one",
-  "You're the lottery that I have won",
-  "When our eyes meet, and I'm in your arms",
+  "When I&apos;m with everyone but you, I&apos;m with no one", // Escaped I'm, I'm
+  "You&apos;re the lottery that I have won", // Escaped You're
+  "When our eyes meet, and I&apos;m in your arms", // Escaped I'm
   "Suddenly, I am whole, my heart is free",
   "And with every glance, a love song softly starts",
   "",
   "I wonder how you feel this way about me",
-  "It's serendipitous, the miracle of having found you",
-  "Someone who's everything I've ever dreamt of",
+  "It&apos;s serendipitous, the miracle of having found you", // Escaped It's
+  "Someone who&apos;s everything I&apos;ve ever dreamt of", // Escaped who's, I've
   "How often do dreams come true?",
   "",
-  "You're so fucking pretty I could sit here and cry",
+  "You&apos;re so fucking pretty I could sit here and cry", // Escaped You're
   "A canvas painted by angels, a masterpiece",
-  "I pinch myself, incredulous that you're mine",
+  "I pinch myself, incredulous that you&apos;re mine", // Escaped you're
   "A celestial alignment, a cosmic release",
   "",
   "I love the way your teeth peek from within your smile",
   "And I love the way your eyes get so smol when you laugh",
   "Your existence is so precious, like a rare gem",
-  "I thank God for you every day on this world's behalf",
+  "I thank God for you every day on this world&apos;s behalf", // Escaped world's
   "",
   "Your strength and vulnerability have me awestruck",
   "A paradox of your boldness and your delicate touch",
   "Your hands on me feel like coming home",
-  "No wonder I can't help but adore you so much",
+  "No wonder I can&apos;t help but adore you so much", // Escaped can't
   "",
   "My life took a turn when you called me your dream girl",
   "And I pondered the rarity of dreams coming true",
@@ -68,7 +67,7 @@ const poem = [
   "My lips on yours, like a honeybee sipping nectar",
   "Like it has finally found the flower it loves the most",
   "Losing myself in your taste for an eternity",
-  "I wouldn't let go of it at any cost",
+  "I wouldn&apos;t let go of it at any cost", // Escaped wouldn't
   "",
   "All my life, fake smiling, laughing alone",
   "So used to being on my own",
@@ -86,7 +85,7 @@ export default function PoemPage() {
 
   return (
     <main
-      // --- 2. REMOVED INTER FONT FROM MAIN ---
+      // Removed Inter font
       className={`min-h-screen w-full relative flex flex-col items-center overflow-x-hidden`}
       style={{
         background: `linear-gradient(to bottom, ${palette.bgTop}, ${palette.bgBottom})`,
@@ -101,7 +100,7 @@ export default function PoemPage() {
         className="w-full flex flex-col items-center pt-16 pb-10 px-5 z-10"
       >
         <motion.h2
-          // --- TITLE USES DANCING SCRIPT ---
+          // Title uses Dancing Script
           className={`text-4xl md:text-5xl font-extrabold mb-8 tracking-tight text-center ${dancingScript.className}`}
           style={{ color: palette.textPrimary }}
           initial={{ opacity: 0, y: 20 }}
@@ -111,7 +110,7 @@ export default function PoemPage() {
           For You, My Dream
         </motion.h2>
 
-        {/* --- 3. ANIMATION FIXED: FADES IN AS ONE BLOCK --- */}
+        {/* Animation fixed: Fades in as one block */}
         <motion.div
           className="w-full max-w-xl px-3"
           initial={{ opacity: 0, y: 20 }}
@@ -122,10 +121,10 @@ export default function PoemPage() {
             line.length === 0 ? (
               <br key={i} />
             ) : (
-              // --- This is now a regular <p>, not motion.p ---
+              // This is now a regular <p>
               <p
                 key={i}
-                // --- POEM LINES USE SQUARE PEG ---
+                // Poem lines use Square Peg
                 className={`text-2xl md:text-3xl leading-relaxed mb-2 text-center ${squarePeg.className}`}
                 style={{
                   color: palette.textPrimary,
@@ -142,7 +141,7 @@ export default function PoemPage() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}
-          // --- SIGNATURE USES DANCING SCRIPT ---
+          // Signature uses Dancing Script
           className={`mt-7 text-2xl italic ${dancingScript.className}`}
           style={{ color: palette.textSecondary }}
         >
@@ -153,7 +152,7 @@ export default function PoemPage() {
       <div className="w-full flex justify-center py-6 z-10">
         <MotionButton
           size="lg"
-          // --- 4. BUTTON USES DEFAULT FONT ---
+          // Button uses default font
           className={`px-8 py-6 text-lg rounded-full shadow-lg font-semibold`}
           style={{
             backgroundColor: palette.buttonBg,
