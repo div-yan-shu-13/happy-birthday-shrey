@@ -1,103 +1,264 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import Confetti from "react-confetti";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Dancing_Script } from "next/font/google";
+
+// Create a motion-wrapped version of the Button
+const MotionButton = motion(Button);
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  weight: ["700"],
+});
+
+// Define the palette
+const palette = {
+  textPrimary: "#4A2E2E",
+  textSecondary: "#8A5A5A",
+  textOnButton: "#FFFFFF",
+  buttonBg: "#D89696",
+  buttonHover: "#B06A6A",
+  accentHeart1: "#FFFFFF",
+  accentHeart2: "#FADCD9",
+  accentHeart3: "#E8A0A0",
+  confettiColors: ["#FADCD9", "#E8A0A0", "#B06A6A"],
+  footerText: "#8A5A5A",
+  overlay: "rgba(255, 251, 247, 0.1)",
+};
+
+// Define a type for our heart properties
+type HeartProps = {
+  id: number;
+  initialX: number;
+  initialOpacity: number;
+  animateX: number;
+  animateOpacity: number;
+  duration: number;
+  delay: number;
+};
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [showConfetti, setShowConfetti] = useState(true);
+  const [windowDimension, setWindowDimension] = useState({
+    width: 0,
+    height: 0,
+  });
+  // --- FIX 1: Create state to hold the hearts ---
+  // It will be empty on the server and initial client render
+  const [hearts, setHearts] = useState<HeartProps[]>([]);
+  const router = useRouter();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    // --- FIX 2: Set dimensions AND generate hearts inside useEffect ---
+    // This code only runs ONCE on the client, after mounting
+    const initialWidth = window.innerWidth;
+    const initialHeight = window.innerHeight;
+
+    // Set dimensions for confetti
+    setWindowDimension({
+      width: initialWidth,
+      height: initialHeight,
+    });
+
+    // Generate the heart properties using random values
+    const generatedHearts = [...Array(12)].map((_, i) => ({
+      id: i,
+      initialX: Math.random() * initialWidth,
+      initialOpacity: 0.7 + Math.random() * 0.3,
+      animateX: Math.random() * initialWidth,
+      animateOpacity: 0.6 + Math.random() * 0.4,
+      duration: 12 + Math.random() * 8,
+      delay: i * 1.25,
+    }));
+
+    // Set the hearts into state, which will trigger a re-render
+    setHearts(generatedHearts);
+
+    // --- Resize handler ---
+    const handleResize = () => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      // Update dimensions for confetti
+      setWindowDimension({ width: newWidth, height: newHeight });
+
+      // Update heart X positions based on new width
+      // This prevents hearts from being "stuck" on one side on resize
+      setHearts((currentHearts) =>
+        currentHearts.map((heart) => ({
+          ...heart,
+          initialX: Math.random() * newWidth,
+          animateX: Math.random() * newWidth,
+        }))
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // --- Confetti timer ---
+    const timer = setTimeout(() => setShowConfetti(false), 5000);
+
+    // --- Cleanup ---
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  return (
+    <main
+      className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden px-4"
+      style={{
+        backgroundImage: "url('/bg-home.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <div
+        className="absolute inset-0 z-0"
+        style={{ backgroundColor: palette.overlay }}
+      ></div>
+
+      {/* Floating Hearts Background */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
+        {/* --- FIX 3: Map over the 'hearts' state variable --- */}
+        {hearts.map((heart) => (
+          <motion.div
+            key={heart.id}
+            className="absolute"
+            initial={{
+              y: "100vh",
+              x: heart.initialX,
+              opacity: heart.initialOpacity,
+            }}
+            animate={{
+              y: "-10vh",
+              x: heart.animateX,
+              opacity: heart.animateOpacity,
+            }}
+            transition={{
+              duration: heart.duration,
+              repeat: Infinity,
+              delay: heart.delay,
+              ease: "linear",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <Heart
+              className="w-7 h-7"
+              style={{
+                color: [
+                  palette.accentHeart1,
+                  palette.accentHeart2,
+                  palette.accentHeart3,
+                ][heart.id % 3],
+              }}
+              fill="currentColor"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Animated Confetti */}
+      {/* This will now work, as windowDimension is set in useEffect */}
+      {showConfetti && (
+        <Confetti
+          width={windowDimension.width}
+          height={windowDimension.height}
+          recycle={false}
+          numberOfPieces={200}
+          colors={palette.confettiColors}
+        />
+      )}
+
+      {/* Main Content */}
+      <motion.div
+        className="z-10 flex flex-col items-center"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+      >
+        <motion.h1
+          className={`text-5xl md:text-6xl mb-4 text-center ${dancingScript.className}`}
+          style={{
+            color: palette.textPrimary,
+            textShadow: "0 2px 8px rgba(0,0,0,0.15)",
+          }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
+        >
+          Happy Birthday, Shrey!
+        </motion.h1>
+
+        <motion.p
+          className="text-lg text-center mb-8 px-4 font-medium"
+          style={{
+            color: palette.textSecondary,
+            textShadow: "0 1px 6px rgba(0,0,0,0.1)",
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+        >
+          A special journey made just for you
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2, duration: 0.8 }}
+        >
+          <MotionButton
+            size="lg"
+            className="flex items-center gap-2 px-8 py-6 text-lg rounded-full shadow-lg font-semibold"
+            style={{
+              backgroundColor: palette.buttonBg,
+              color: palette.textOnButton,
+            }}
+            whileHover={{
+              backgroundColor: palette.buttonHover,
+              scale: 1.05,
+              boxShadow: "0 10px 20px -5px rgba(0,0,0,0.2)",
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            onClick={() => router.push("/quiz")}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            <Heart className="w-5 h-5 mr-1" fill="currentColor" />
+            <span className="tracking-wide">Start the Journey</span>
+          </MotionButton>
+        </motion.div>
+      </motion.div>
+
+      {/* Footer */}
+      <motion.div
+        className="absolute bottom-6 left-0 w-full flex justify-center z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 1 }}
+      >
+        <span
+          className="flex items-center gap-1.5 text-sm"
+          style={{
+            color: palette.footerText,
+            textShadow: "0 1px 4px rgba(0,0,0,0.1)",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          Made with
+          <Heart
+            className="w-4 h-4"
+            style={{ color: palette.buttonBg }}
+            fill="currentColor"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          by Lavya
+        </span>
+      </motion.div>
+    </main>
   );
 }
