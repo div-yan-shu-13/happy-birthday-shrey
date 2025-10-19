@@ -48,6 +48,11 @@ const wishesData = [
       "Happy Birthday to one of the best people I know! You're funny, kind, and always ready to help anyone who needs it. People like you make life lighter and happier just by being around. I'm so glad to have a friend like you. Someone who can make me laugh no matter what and who genuinely cares. Once again, happiest birthday, Shrey.",
   },
   {
+    sender: "Hamza",
+    message:
+      "Happy Birthday yaar. I hope your day starts with a strong Starbucks espresso runs as smooth as Nescafe Gold and ends as sweet as a Costa latte. You're literally powered by caffeine and I swear if coffee ever runs out the world would need to find another way to keep you going. 😂😂😂 Wishing you lots of happiness, peace and endless cups of your favorite brew. Happy birthday once again!",
+  },
+  {
     sender: "Divyanshu",
     message:
       "Happy Birthday, Shrey! I hope your year ahead is filled with laughter, love, and countless little moments that make you smile. Keep shining and may all your wishes come true!",

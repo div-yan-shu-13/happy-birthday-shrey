@@ -1,67 +1,72 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { MedievalSharp } from "next/font/google";
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image"; // Import the Image component
+import { MedievalSharp, Inter } from "next/font/google";
+import Image from "next/image";
 
-// Instantiate the new font
+// Instantiate the fonts
 const medievalSharp = MedievalSharp({
   subsets: ["latin"],
   weight: ["400"],
 });
+const inter = Inter({ subsets: ["latin"] });
 
 // Create the MotionButton
 const MotionButton = motion(Button);
 
-// --- YOUR SLYTHERIN PALETTE ---
+// --- SLYTHERIN PALETTE ---
 const palette = {
-  parchmentBg: "/parchment-texture.jpg", // We are using this now!
-  bgOverlay: "rgba(18, 30, 26, 0.8)", // Your 80% opacity overlay
-  textPrimary: "#A5A9B4", // Your primary text color
-  textSecondary: "#E0E0E0", // Your secondary text color
-  accentGreen: "#0D6247", // For buttons
-  accentGlow: "rgba(13, 98, 71, 0.7)", // For button glow
+  parchmentBg: "/parchment-texture.jpg",
+  bgOverlay: "rgba(18, 30, 26, 0.8)",
+  textPrimary: "#A5A9B4",
+  textSecondary: "#E0E0E0",
+  accentGreen: "#0D6247",
+  accentGlow: "rgba(13, 98, 71, 0.7)",
   frameBorder: "#2F2F2F",
   frameBg: "rgba(42, 42, 42, 0.3)",
-  labelBg: "#2A2A2A",
-  labelText: "#E0E0E0",
   buttonBg: "#0D6247",
   buttonHover: "#1A8361",
   buttonText: "#E0E0E0",
-  pathColor: "#E0E0E0", // Silver-white for high contrast
-  pathGlow: "rgba(224, 224, 224, 0.5)", // A bright, silvery glow
+  pathColor: "#E0E0E0", // Silver for path
+  pathGlow: "rgba(224, 224, 224, 0.5)", // Silver glow
 };
 
+// --- Timeline Data ---
 const timelineData = [
-  // ... your data
-  { src: "/timeline-1.jpg", date: "6/3/23" },
-  { src: "/timeline-2.jpg", date: "19/3/23" },
-  { src: "/timeline-3.jpg", date: "23/6/23" },
-  { src: "/timeline-4.jpg", date: "06/08/23" },
-  { src: "/timeline-5.jpg", date: "18/10/23" },
-  { src: "/timeline-6.jpg", date: "26/12/23" },
-  { src: "/timeline-7.jpg", date: "27/5/24" },
-  { src: "/timeline-8.jpg", date: "21/06/24" },
-  { src: "/timeline-9.jpg", date: "28/09/25" },
+  { src: "/timeline-1.jpg", description: "Fav child actor" },
+  { src: "/timeline-2.jpg", description: "Shrey thinking of a way to get out" },
+  { src: "/timeline-3.jpg", description: "On an unofficial date" },
+  { src: "/timeline-4.jpg", description: "Tryna rizz up" },
+  { src: "/timeline-5.jpg", description: "Stars protecting from the rain" },
+  { src: "/timeline-6.jpg", description: "Absolute cutie" },
+  { src: "/timeline-7.jpg", description: "The movie day" },
+  { src: "/timeline-8.jpg", description: "Movie day again" },
+  { src: "/timeline-9.jpg", description: "Eepiest eepy person" },
+  {
+    src: "/timeline-10.jpg",
+    description:
+      "This one moment when you know you are not a sad story anymore",
+  },
 ];
 
-// --- (All the path logic and constants are unchanged) ---
-const DOT_TOP_OFFSET = 32;
-const SEGMENT_HEIGHT = 452;
-const generatePathString = (
+// --- ROUGH CONSTANTS FOR STATIC PATH ---
+const STATIC_SEGMENT_HEIGHT = 420;
+const PATH_START_Y = 100;
+
+// --- STATIC PATH FUNCTION ---
+const generateStaticPathString = (
   itemCount: number,
-  segmentHeight = SEGMENT_HEIGHT,
+  segmentHeight = STATIC_SEGMENT_HEIGHT,
   svgWidth = 96,
   curveAmount = 48,
-  dotTopOffset = DOT_TOP_OFFSET
+  startY = PATH_START_Y
 ) => {
   const midX = svgWidth / 2;
-  let d = `M ${midX},${dotTopOffset}`;
-  let yStart = dotTopOffset;
+  let d = `M ${midX},${startY}`;
+  let yStart = startY;
   for (let i = 0; i < itemCount - 1; i++) {
-    const yEnd = (i + 1) * segmentHeight + dotTopOffset;
+    const yEnd = startY + (i + 1) * segmentHeight;
     const direction = i % 2 === 0 ? -1 : 1;
     const controlX = midX + curveAmount * direction;
     const cp1y = yStart + segmentHeight / 3;
@@ -69,36 +74,17 @@ const generatePathString = (
     d += ` C ${controlX},${cp1y} ${controlX},${cp2y} ${midX},${yEnd}`;
     yStart = yEnd;
   }
+  d += ` L ${midX},${yStart + segmentHeight / 2}`;
   return d;
 };
-// --- END OF UNCHANGED LOGIC ---
+// --- END STATIC PATH FUNCTION ---
 
 export default function TimelinePage() {
   const router = useRouter();
-  const [pathLength, setPathLength] = useState(0);
-  const pathRef = useRef<SVGPathElement>(null);
-  const mainRef = useRef<HTMLElement>(null);
-  const pathD = generatePathString(timelineData.length);
-  const { scrollYProgress } = useScroll({
-    target: mainRef,
-    offset: ["start start", "end end"],
-  });
-
-  // --- FIX 1: ADJUSTED SCROLL RANGE ---
-  const pathOffset = useTransform(
-    scrollYProgress,
-    [0.1, 0.9], // Changed from [0.05, 0.95]
-    [pathLength, 0]
-  );
-  useEffect(() => {
-    if (pathRef.current) {
-      setPathLength(pathRef.current.getTotalLength());
-    }
-  }, []);
+  const pathD = generateStaticPathString(timelineData.length);
 
   return (
     <main
-      ref={mainRef}
       className="min-h-screen w-full relative flex flex-col items-center overflow-x-hidden"
       style={{
         backgroundImage: `url(${palette.parchmentBg})`,
@@ -112,32 +98,40 @@ export default function TimelinePage() {
         style={{ backgroundColor: palette.bgOverlay }}
       ></div>
 
+      {/* --- Titles --- */}
       <motion.h2
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1 }}
         className={`pt-12 pb-2 text-5xl md:text-6xl font-bold text-center drop-shadow z-10 ${medievalSharp.className}`}
         style={{
-          color: palette.textPrimary, // Your color
+          color: palette.textPrimary,
           textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
         }}
       >
-        Mischief Managed: Our Story
+        Mischief Managed
       </motion.h2>
-      <p
+
+      {/* --- ADDED ANIMATION TO SUBTITLE --- */}
+      <motion.p
+        initial={{ y: -20, opacity: 0 }} // Start slightly higher
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.3 }} // Delay slightly after title
         className={`text-lg text-center mb-6 px-4 italic font-medium drop-shadow z-10 ${medievalSharp.className}`}
         style={{
-          color: palette.textSecondary, // Your color
+          color: palette.textSecondary,
           textShadow: "1px 1px 3px rgba(0,0,0,0.09)",
         }}
       >
-        &quot;Always.&quot;
-      </p>
+        Celebrating Your Magical Journey!
+      </motion.p>
+      {/* --- END SUBTITLE ANIMATION --- */}
 
+      {/* --- Crest (Unchanged) --- */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 0.8, delay: 0.5 }} // Slightly increased delay
         className="z-10 mb-10"
       >
         <Image
@@ -150,51 +144,58 @@ export default function TimelinePage() {
       </motion.div>
 
       <div className="relative w-full max-w-4xl p-8 z-10">
-        <svg
-          className="absolute left-1/2 top-0 h-full w-24 -translate-x-1/2 hidden md:block"
+        {/* --- ADDED ANIMATION TO SVG PATH (Desktop) --- */}
+        <motion.svg
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }} // Appear after crest
+          height={PATH_START_Y + timelineData.length * STATIC_SEGMENT_HEIGHT}
+          className="absolute left-1/2 top-0 w-24 -translate-x-1/2 hidden md:block"
           style={{ pointerEvents: "none" }}
         >
-          <motion.path
-            ref={pathRef}
+          <path
             d={pathD}
             stroke={palette.pathColor}
-            strokeWidth={3}
+            strokeWidth={2}
             fill="none"
             strokeLinecap="round"
-            strokeDasharray={`1 ${pathLength > 0 ? 20 : 0}`}
-            style={{
-              filter: `drop-shadow(0 0 8px ${palette.pathGlow})`,
-              strokeDashoffset: pathOffset,
-            }}
+            strokeDasharray="8 4"
+            style={{ filter: `drop-shadow(0 0 5px ${palette.pathGlow})` }}
           />
-        </svg>
+        </motion.svg>
+        {/* --- END SVG PATH ANIMATION --- */}
 
-        <div
-          className="absolute left-1/2 top-0 h-full w-0.5 block md:hidden"
+        {/* --- ADDED ANIMATION TO Simple Mobile Line --- */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }} // Appear after crest
+          className="absolute left-1/2 top-0 h-full w-0.5 block md:hidden opacity-30"
           style={{
-            // --- FIX 3: USE HIGH-CONTRAST PATH COLOR ---
             backgroundColor: palette.pathColor,
             boxShadow: `0 0 8px ${palette.pathGlow}`,
           }}
-        ></div>
+        ></motion.div>
+        {/* --- END MOBILE LINE ANIMATION --- */}
 
-        <div className="relative flex flex-col gap-16">
+        {/* Timeline items */}
+        <div className="relative flex flex-col gap-12">
           {timelineData.map((item, i) => {
             const isOdd = i % 2 !== 0;
             return (
               <div
                 key={i}
-                className={`relative flex w-full ${
+                className={`flex w-full ${
                   isOdd ? "md:justify-end" : "justify-start"
                 }`}
               >
                 <motion.div
                   className={`w-full md:w-1/2 ${
-                    isOdd ? "md:pl-8 md:text-left" : "md:pr-8 md:text-right"
+                    isOdd ? "md:pl-8" : "md:pr-8"
                   } text-center`}
                   initial={{ opacity: 0, x: isOdd ? 50 : -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.5 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.6 }}
                 >
                   <motion.div
@@ -203,6 +204,7 @@ export default function TimelinePage() {
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.2 }}
                   >
+                    {/* Image Frame */}
                     <div
                       className="rounded-lg overflow-hidden cursor-pointer p-1"
                       style={{
@@ -211,45 +213,44 @@ export default function TimelinePage() {
                         boxShadow: "2px 2px 8px rgba(0,0,0,0.5)",
                       }}
                     >
-                      <img
+                      <Image
                         src={item.src}
-                        alt={`moment-${i + 1}`}
+                        alt={`Moment ${i + 1}: ${item.description || ""}`}
+                        width={400}
+                        height={320}
+                        style={{ objectFit: "cover" }}
                         className="w-full max-w-sm md:max-w-none h-[320px] object-cover rounded"
                       />
                     </div>
 
-                    <div
-                      className={`mt-4 inline-block px-5 py-2 rounded-full text-base font-semibold shadow-md ${medievalSharp.className}`}
-                      style={{
-                        backgroundColor: palette.labelBg,
-                        color: palette.labelText,
-                        border: `1px solid ${palette.frameBorder}`,
-                        letterSpacing: "0.08em",
-                        boxShadow: "2px 2px 8px rgba(0,0,0,0.5)",
-                      }}
-                    >
-                      {item.date}
-                    </div>
+                    {/* Styled Description Block */}
+                    {item.description && (
+                      <div
+                        className="mt-2 p-2 rounded max-w-[90%] mx-auto"
+                        style={{
+                          backgroundColor: palette.frameBg,
+                          border: `1px solid ${palette.frameBorder}`,
+                        }}
+                      >
+                        <p
+                          className={`text-sm italic ${inter.className}`}
+                          style={{ color: palette.textPrimary, opacity: 0.9 }}
+                        >
+                          {item.description}
+                        </p>
+                      </div>
+                    )}
                   </motion.div>
                 </motion.div>
 
-                {/* --- FIX 2: ADD THE DOT BACK --- */}
-                <div
-                  className="absolute left-1/2 top-8 -translate-x-1/2 w-5 h-5 rounded-full z-0" // top-8 = 32px (DOT_TOP_OFFSET)
-                  style={{
-                    backgroundColor: palette.pathColor,
-                    boxShadow: `0 0 8px ${palette.pathGlow}`,
-                    border: `2px solid ${palette.frameBorder}`,
-                  }}
-                ></div>
-                {/* --- END OF DOT --- */}
+                {/* --- DOT REMOVED --- */}
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Button (Unchanged) */}
+      {/* --- Button --- */}
       <div className="w-full flex justify-center py-12 z-10">
         <MotionButton
           size="lg"
