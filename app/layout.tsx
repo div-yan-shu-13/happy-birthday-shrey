@@ -1,20 +1,18 @@
+// app/layout.tsx
 import type { Metadata } from "next";
-// Import the default font you want for the body (e.g., Inter)
-// If you don't import one, it will use the system default sans-serif font
-import { Inter, Dancing_Script, Square_Peg } from "next/font/google";
+// ... other imports ...
 import "./globals.css";
-import { cn } from "@/lib/utils"; // Assuming you have shadcn/ui utils
+import { cn } from "@/lib/utils";
+import { AudioProvider } from "./context/AudioContext"; // Import the provider
 
-// Default body font
+// ... font definitions ...
+import { Inter, Dancing_Script, Square_Peg } from "next/font/google";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-// Special fonts (make them available as CSS variables)
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
   weight: ["700"],
   variable: "--font-dancing-script",
 });
-
 const squarePeg = Square_Peg({
   subsets: ["latin"],
   weight: ["400"],
@@ -22,7 +20,7 @@ const squarePeg = Square_Peg({
 });
 
 export const metadata: Metadata = {
-  title: "Happy Birthday, Shrey!", // Set a nice title
+  title: "Happy Birthday, Shrey!",
   description: "A special birthday journey created by Lavya.",
 };
 
@@ -35,13 +33,17 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased", // Use default font
-          inter.variable, // Make Inter variable available
-          dancingScript.variable, // Make Dancing Script variable available
-          squarePeg.variable // Make Square Peg variable available
+          "min-h-screen bg-background font-sans antialiased",
+          inter.variable,
+          dancingScript.variable,
+          squarePeg.variable
         )}
       >
-        {children}
+        {/* Wrap everything in the AudioProvider */}
+        <AudioProvider>
+          {children}
+          {/* Audio tag is now INSIDE the provider */}
+        </AudioProvider>
       </body>
     </html>
   );

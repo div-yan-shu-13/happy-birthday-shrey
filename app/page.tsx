@@ -1,23 +1,20 @@
+// app/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; // Removed useRef
 import Confetti from "react-confetti";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Dancing_Script } from "next/font/google";
-import styles from "./Home.module.css"; // Import the CSS Module
+import styles from "./Home.module.css";
+import { useAudio } from "./context/AudioContext"; // <-- Import useAudio
 
-// Create a motion-wrapped version of the Button
 const MotionButton = motion(Button);
+const dancingScript = Dancing_Script({ subsets: ["latin"], weight: ["700"] });
 
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  weight: ["700"],
-});
-
-// The palette remains the same
+// ... (palette and HeartProps type remain the same) ...
 const palette = {
   textPrimary: "#4A2E2E",
   textSecondary: "#8A5A5A",
@@ -31,8 +28,6 @@ const palette = {
   footerText: "#8A5A5A",
   overlay: "rgba(255, 251, 247, 0.1)",
 };
-
-// Define a type for our heart properties
 type HeartProps = {
   id: number;
   initialX: number;
@@ -51,9 +46,10 @@ export default function Home() {
   });
   const [hearts, setHearts] = useState<HeartProps[]>([]);
   const router = useRouter();
+  const { playAudio, isPlaying } = useAudio(); // <-- Get play function from context
 
   useEffect(() => {
-    // ... (useEffect logic remains the same) ...
+    // ... (rest of useEffect remains the same) ...
     const initialWidth = window.innerWidth;
     const initialHeight = window.innerHeight;
     setWindowDimension({ width: initialWidth, height: initialHeight });
@@ -87,21 +83,27 @@ export default function Home() {
     };
   }, []);
 
+  // --- Updated handler to use context ---
+  const handleStartJourney = async () => {
+    if (!isPlaying) {
+      // Only try to play if not already playing
+      await playAudio(); // Call the function from context
+    }
+    router.push("/quiz");
+  };
+
   return (
     <main
-      // Apply CSS module class for background handling
-      // Use justify-center again as the mobile image handles layout
       className={`flex flex-col items-center justify-center min-h-screen relative overflow-hidden px-4 ${styles.backgroundImage}`}
     >
-      {/* Overlay */}
+      {/* --- AUDIO TAG REMOVED FROM HERE --- */}
       <div
         className="absolute inset-0 z-0"
         style={{ backgroundColor: palette.overlay }}
       ></div>
-
-      {/* ... (Rest of the code: Hearts, Confetti, Content, Footer remains the same) ... */}
-      {/* Floating Hearts Background */}
+      {/* ... (Floating Hearts, Confetti remain the same) ... */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
+        {" "}
         {hearts.map((heart) => (
           <motion.div
             key={heart.id}
@@ -123,6 +125,7 @@ export default function Home() {
               ease: "linear",
             }}
           >
+            {" "}
             <Heart
               className="w-7 h-7"
               style={{
@@ -133,12 +136,10 @@ export default function Home() {
                 ][heart.id % 3],
               }}
               fill="currentColor"
-            />
+            />{" "}
           </motion.div>
-        ))}
-      </div>
-
-      {/* Animated Confetti */}
+        ))}{" "}
+      </div>{" "}
       {showConfetti && (
         <Confetti
           width={windowDimension.width}
@@ -148,11 +149,9 @@ export default function Home() {
           colors={palette.confettiColors}
         />
       )}
-
       {/* Main Content */}
       <motion.div
-        // Added negative top margin for mobile, reset for desktop
-        className="z-10 flex flex-col items-center -mt-85 md:mt-5"
+        className="z-10 flex flex-col items-center -mt-16 md:mt-0"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
@@ -188,6 +187,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 0.8 }}
         >
+          {/* --- UPDATE BUTTON onClick --- */}
           <MotionButton
             size="lg"
             className="flex items-center gap-2 px-8 py-6 text-lg rounded-full shadow-lg font-semibold"
@@ -202,36 +202,37 @@ export default function Home() {
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            onClick={() => router.push("/quiz")}
+            onClick={handleStartJourney} // <-- Use the updated handler
           >
             <Heart className="w-5 h-5 mr-1" fill="currentColor" />
             <span className="tracking-wide">Start the Journey</span>
           </MotionButton>
         </motion.div>
       </motion.div>
-
-      {/* Footer */}
+      {/* ... (Footer remains the same) ... */}
       <motion.div
         className="absolute bottom-6 left-0 w-full flex justify-center z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 1 }}
       >
+        {" "}
         <span
-          className="flex items-center gap-1.5 text-sm font-semibold"
+          className="flex items-center gap-1.5 text-sm"
           style={{
             color: palette.footerText,
             textShadow: "0 1px 4px rgba(0,0,0,0.1)",
           }}
         >
-          Made with
+          {" "}
+          Made with{" "}
           <Heart
             className="w-4 h-4"
             style={{ color: palette.buttonBg }}
             fill="currentColor"
-          />
-          by Lavya & Executed by Divyanshu :)
-        </span>
+          />{" "}
+          by Lavya{" "}
+        </span>{" "}
       </motion.div>
     </main>
   );
