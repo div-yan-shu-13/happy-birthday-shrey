@@ -67,10 +67,6 @@ const wishesData = [
     message:
       "Happy birthday son-in-law, to ensure your happiness, keep my daughter satisfied and smiling.",
   },
-  {
-    sender: "Lavya (the bestie!)",
-    message: "To be added later :)",
-  },
 ];
 
 // --- ANIMATION VARIANTS FOR THE WISHES LIST ---
