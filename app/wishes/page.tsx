@@ -53,6 +53,11 @@ const wishesData = [
       "Happy Birthday yaar. I hope your day starts with a strong Starbucks espresso runs as smooth as Nescafe Gold and ends as sweet as a Costa latte. You're literally powered by caffeine and I swear if coffee ever runs out the world would need to find another way to keep you going. 😂😂😂 Wishing you lots of happiness, peace and endless cups of your favorite brew. Happy birthday once again!",
   },
   {
+    sender: "Akriti",
+    message:
+      "Happy b’day, you oaf!! Thanks for being a great friend and a sister (sorry you are too much of a gossip and a diva to just be a brother 🥹) Have the best day ever and a great year ahead, wishing you loads of abundance in everything 🙌 Keep brightening up the world one fucked up smile at a time, doxaab 😇 Big thanks and much love to lavya for taking one for the team. Ps: glad you left the hoe life behind 🥹 (also all my aunts in the Netherlands 😍)",
+  },
+  {
     sender: "Divyanshu",
     message:
       "Happy Birthday, Shrey! I hope your year ahead is filled with laughter, love, and countless little moments that make you smile. Keep shining and may all your wishes come true!",
