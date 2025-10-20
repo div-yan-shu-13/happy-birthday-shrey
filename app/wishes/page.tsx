@@ -55,7 +55,7 @@ const wishesData = [
   {
     sender: "Akriti",
     message:
-      "Happy b’day, you oaf!! Thanks for being a great friend and a sister (sorry you are too much of a gossip and a diva to just be a brother 🥹) Have the best day ever and a great year ahead, wishing you loads of abundance in everything 🙌 Keep brightening up the world one fucked up smile at a time, doxaab 😇 Big thanks and much love to lavya for taking one for the team. Ps: glad you left the hoe life behind 🥹 (also all my aunts in the Netherlands 😍)",
+      "Happy birthday, you oaf!! Thanks for being a great friend and a sister (sorry you are too much of a gossip and a diva to just be a brother 🥹) Have the best day ever and a great year ahead, wishing you loads of abundance in everything 🙌 Keep brightening up the world one fucked up smile at a time, doxaab 😇 Big thanks and much love to lavya for taking one for the team. Ps: glad you left the hoe life behind 🥹 (also all my aunts in the Netherlands 😍)",
   },
   {
     sender: "Divyanshu",
